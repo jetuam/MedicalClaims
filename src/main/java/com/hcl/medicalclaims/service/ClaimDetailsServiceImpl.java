@@ -18,6 +18,7 @@ import com.hcl.medicalclaims.exception.ClaimDetailsNotfoundException;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import com.hcl.medicalclaims.repository.ClaimDetailsRepository;
 import com.hcl.medicalclaims.repository.PolicyRepository;
+import com.hcl.medicalclaims.util.ExceptionConstants;
 
 /* 
 *@author priyanka
@@ -43,9 +44,7 @@ public class ClaimDetailsServiceImpl implements ClaimsDetailsService {
 	   
 	 	ClaimDetailsResponseDto claimDetailsResponseDto = new ClaimDetailsResponseDto();
 	 	Optional<ApproverDetails> findById = approverRepository.findById(approverId);
-	 	if (!findById.isPresent()) {
-			//throw new ApproverDetails()
-		}
+	 	
 	 	ApproverDetails approverDetails = findById.get();	
 	 	LOGGER.info("ROLE:"+approverDetails.getApproverRole());
 	 	if(approverDetails.getApproverRole().equalsIgnoreCase("MANAGER"))
@@ -53,29 +52,34 @@ public class ClaimDetailsServiceImpl implements ClaimsDetailsService {
 	 		LOGGER.info("inside manager"+approverDetails.getApproverRole());
 	 		String approvalStatus="submitted";
 				Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByClaimStatus(approvalStatus);
+				
+				
 				if(!claimDetailsOptional.isPresent()) {
-					throw new ClaimDetailsNotfoundException("claim not found");
+					throw new ClaimDetailsNotfoundException(ExceptionConstants.CLAIM_NOT_FOUND);
 				}
 
 				 List<ClaimDetails> claimDetails = claimDetailsOptional.get();
 				 claimDetails.stream().forEach(claim -> {
 					claimDto = new ClaimDto();
 					BeanUtils.copyProperties(claim, claimDto);
-					//claimDto.setPolicyId(policy.getPolicyId());
+					
+				//	Optional<PolicyDetails> OptionalPloicy=claimDetailsRepository.findByPolicyDetails(claim.getClaimId());
+					
+					claimDto.setPolicyId(claimDetailsOptional.get().get(0).getPolicyDetails().getPolicyId());
 					claimDetailss.add(claimDto);
 				 });
 	 	}else if (approverDetails.getApproverRole().equalsIgnoreCase("SENIOR MANAGER")) {
 	 		String approvalStatus="forwarded";
 	 		Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByClaimStatus(approvalStatus);
 			if(!claimDetailsOptional.isPresent()) {
-				throw new ClaimDetailsNotfoundException("claim not found");
+				throw new ClaimDetailsNotfoundException(ExceptionConstants.CLAIM_NOT_FOUND);
 			}
 
 			 List<ClaimDetails> claimDetails = claimDetailsOptional.get();
 			 claimDetails.stream().forEach(claim -> {
 				claimDto = new ClaimDto();
 				BeanUtils.copyProperties(claim, claimDto);
-				//claimDto.setPolicyId(policy.getPolicyId());
+				claimDto.setPolicyId(claimDetailsOptional.get().get(0).getPolicyDetails().getPolicyId());
 				claimDetailss.add(claimDto);
 			 });
 		}
