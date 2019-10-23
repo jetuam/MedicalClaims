@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
 import com.hcl.medicalclaims.service.ClaimsDetailsService;
 /* 
 *@author priyanka
@@ -24,9 +25,10 @@ public class ClaimDetailsController {
 	/**
 	 * @apiNote on the basis of policy_id
 	 * @return getting claim details .
+	 * @throws ApproverNotExistsException 
 	 */
 	@GetMapping("/{approverId}")
-	public ClaimDetailsResponseDto getClaimDetails(@PathVariable Integer approverId)
+	public ClaimDetailsResponseDto getClaimDetails(@PathVariable Integer approverId) throws ApproverNotExistsException
 	{
 		LOGGER.info("inside claim details controller");
 		ClaimDetailsResponseDto claimDetailsResponseDto=claimsDetailsService.getClaimDetails(approverId);

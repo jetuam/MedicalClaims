@@ -17,6 +17,7 @@ import com.hcl.medicalclaims.entity.ApproverDetails;
 import
   com.hcl.medicalclaims.entity.ClaimDetails; import
   com.hcl.medicalclaims.entity.PolicyDetails;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import
   com.hcl.medicalclaims.repository.ClaimDetailsRepository; import
@@ -92,7 +93,7 @@ import
 		  claimDetailsResponseDto=new ClaimDetailsResponseDto();
 		  claimDetailsResponseDto.setClaimDetails(claimDetailss); }
 		  
-		  @Test public void getClaimDetailsTest() {
+		  @Test public void getClaimDetailsTest() throws ApproverNotExistsException {
 		  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(findById);
 		  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
 		  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());

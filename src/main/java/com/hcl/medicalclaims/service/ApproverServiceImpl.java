@@ -57,13 +57,11 @@ public class ApproverServiceImpl implements ApproverService {
 		LOGGER.info("the events for the approve request is called");
 		
 		ApproveResponseDto approveResponse = new ApproveResponseDto();
-		ClaimDetails claim = new ClaimDetails();
 		ApproverSummary approveSummary = new ApproverSummary();
 		
 		Optional<ApproverDetails> approverDetails = approverRepository.findByapproverId(approveRequest.getApproverId());
 		Optional<ClaimDetails> claimDetails = claimRepository.findByclaimId(approveRequest.getClaimId());
 		
-		LOGGER.info("optional check for the above",approverDetails.get().getApproverId());
 		
 		if(approverDetails.isPresent())
 		{
@@ -106,7 +104,6 @@ public class ApproverServiceImpl implements ApproverService {
 					ApproverSummary approve = approveSummaryRepo.save(approveSummary);
 					
 					ClaimDetails claims = new ClaimDetails();
-					//BeanUtils.copyProperties(claimDeBeanUtils.copyProperties(claimDetails, claims);tails, claims);
 					claimDetails.get().setClaimStatus(approveRequest.getClaimStatus());
 					claimDetails.get().setApproverSummaryId(approve.getApproverSummaryId());
 					BeanUtils.copyProperties(claimDetails.get(), claims);

@@ -13,7 +13,9 @@
   import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto; import
   com.hcl.medicalclaims.dto.ClaimDto; import
   com.hcl.medicalclaims.entity.ClaimDetails; import
-  com.hcl.medicalclaims.entity.PolicyDetails; import
+  com.hcl.medicalclaims.entity.PolicyDetails;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
+import
   com.hcl.medicalclaims.service.ClaimDetailsServiceImpl;
 /*
 @author priyanka*/
@@ -27,7 +29,7 @@
   List<ClaimDto> claimDetailss; PolicyDetails polictDetails;
   List<PolicyDetails> polictDetailss; ClaimDto claimDto;
   
-  @Test public void getClaimDetailsTest() { claimDetails=new ClaimDetails();
+  @Test public void getClaimDetailsTest() throws ApproverNotExistsException { claimDetails=new ClaimDetails();
   claimDetailss = new ArrayList<>(); polictDetails=new PolicyDetails();
   polictDetails.setPolicyId(1); polictDetails.setPolicyNo(1234);
   polictDetails.setPolicyType("Dental");
