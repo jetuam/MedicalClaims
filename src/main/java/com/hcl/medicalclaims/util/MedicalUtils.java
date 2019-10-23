@@ -14,9 +14,9 @@ public class MedicalUtils {
 	public static final String MANAGER = "MANAGER";
 	public static final String BRANCH_MANAGER = "BRANCH MANAGER";
 	public static final String CLAIM_APPROVED = "Claim approved successfully";
-	public static final String APPROVED = "APPROVED";
-	public static final String REJECTED = "REJECTED";
-	public static final String FORWARDED = "FORWARDED";
+	public static final String APPROVED = "Approved";
+	public static final String REJECTED = "ReJected";
+	public static final String FORWARDED = "Forwarded";
 	
 	
 }

@@ -28,7 +28,6 @@ import com.hcl.medicalclaims.service.ApproverService;
 @CrossOrigin(allowedHeaders = { "*", "*/" }, origins = { "*", "*/" })
 public class ApproveController {
 
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApproveController.class);
 	
 	@Autowired

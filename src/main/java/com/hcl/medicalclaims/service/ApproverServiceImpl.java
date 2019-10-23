@@ -20,6 +20,7 @@ import com.hcl.medicalclaims.repository.ApproveSummaryRepository;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import com.hcl.medicalclaims.repository.ClaimRepository;
 import com.hcl.medicalclaims.repository.PolicyRepository;
+import com.hcl.medicalclaims.util.ApproveUtil;
 import com.hcl.medicalclaims.util.MedicalUtils;
 
 /**
@@ -44,6 +45,9 @@ public class ApproverServiceImpl implements ApproverService {
 	@Autowired
 	PolicyRepository policyRepository;
 	
+	@Autowired
+	ApproveUtil approveUtil;
+	
 	/**
 	 * The service is called for approving the claims
 	 * @param ApproveRequestDto
@@ -63,16 +67,14 @@ public class ApproverServiceImpl implements ApproverService {
 		Optional<ApproverDetails> approverDetails = approverRepository.findByapproverId(approveRequest.getApproverId());
 		Optional<ClaimDetails> claimDetails = claimRepository.findByclaimId(approveRequest.getClaimId());
 		
-		LOGGER.info("optional check for the above",approverDetails.get().getApproverId());
-		
 		if(approverDetails.isPresent())
 		{
 			if(claimDetails.isPresent())
 			{
 				if(approverDetails.get().getApproverRole().equals(MedicalUtils.MANAGER))
 				{
-					
-					LOGGER.info("inside if statement for approverDetails");
+					 approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
+					/*LOGGER.info("inside if statement for approverDetails");
 					approveSummary.setApproverId(approverDetails.get().getApproverId());
 					approveSummary.setApproverRole(approverDetails.get().getApproverRole());
 					ApproverSummary approve = approveSummaryRepo.save(approveSummary);
@@ -96,11 +98,13 @@ public class ApproverServiceImpl implements ApproverService {
 					}
 					approveResponse.setMessage(MedicalUtils.CLAIM_APPROVED);
 					approveResponse.setPolicyNo(approveRequest.getPolicyId());
-					approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);
+					approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);*/
 					
 				}else if(approverDetails.get().getApproverRole().equals(MedicalUtils.BRANCH_MANAGER))
 				{
-					LOGGER.info("inside else if statement for approverDetails");
+					
+					approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
+					/*LOGGER.info("inside else if statement for approverDetails");
 					approveSummary.setApproverId(approverDetails.get().getApproverId());
 					approveSummary.setApproverRole(approverDetails.get().getApproverRole());
 					ApproverSummary approve = approveSummaryRepo.save(approveSummary);
@@ -124,7 +128,7 @@ public class ApproverServiceImpl implements ApproverService {
 					}
 					approveResponse.setMessage(MedicalUtils.CLAIM_APPROVED);
 					approveResponse.setPolicyNo(approveRequest.getPolicyId());
-					approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);
+					approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);*/
 					
 					
 				}

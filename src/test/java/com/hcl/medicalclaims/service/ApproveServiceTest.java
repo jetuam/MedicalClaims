@@ -2,6 +2,7 @@ package com.hcl.medicalclaims.service;
 
 import java.util.Optional;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,21 +12,26 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.hcl.medicalclaims.dto.ApproveRequestDto;
+import com.hcl.medicalclaims.dto.ApproveResponseDto;
 import com.hcl.medicalclaims.entity.ApproverDetails;
 import com.hcl.medicalclaims.entity.ApproverSummary;
 import com.hcl.medicalclaims.entity.ClaimDetails;
 import com.hcl.medicalclaims.entity.PolicyDetails;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
+import com.hcl.medicalclaims.exception.ClaimNumberNotExistsException;
 import com.hcl.medicalclaims.repository.ApproveSummaryRepository;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import com.hcl.medicalclaims.repository.ClaimRepository;
 import com.hcl.medicalclaims.repository.PolicyRepository;
+import com.hcl.medicalclaims.util.ApproveUtil;
+import com.hcl.medicalclaims.util.MedicalUtils;
 
 /**
  * The TestApproveService is used for test cases for approve request accept or reject
  * @author Sharath G S
  *
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ApproveServiceTest {
 
 	@Mock
@@ -40,6 +46,9 @@ public class ApproveServiceTest {
 	@Mock
 	PolicyRepository policyRepository;
 	
+	@Mock
+	ApproveUtil approveUtil;
+	
 	@InjectMocks
 	ApproverServiceImpl approveService;
 	
@@ -48,10 +57,11 @@ public class ApproveServiceTest {
 	ClaimDetails claimDetails = null;
 	PolicyDetails policyDetails = null;
 	ApproverSummary approveSummary = null;
+	ApproveResponseDto approveResponse = null;
 	
 	@Before
 	public void setUp()
-	{
+	{		
 		policyDetails = new PolicyDetails();
 		policyDetails.setClaimedAmount((double) 30000);
 		policyDetails.setEligibleAmount((double) 200000);
@@ -74,6 +84,12 @@ public class ApproveServiceTest {
 		approverDetails.setPassword("test@123");
 		approverDetails.setApproverRole("MANAGER");
 		
+		
+		approveSummary = new ApproverSummary();
+		approveSummary.setApproverId(1);
+		approveSummary.setApproverRole("MANAGER");
+		approveSummary.setApproverSummaryId(1);
+		
 		claimDetails = new ClaimDetails();
 		claimDetails.setApproverSummaryId(1);
 		claimDetails.setClaimAmount((double) 50000);
@@ -86,23 +102,77 @@ public class ApproveServiceTest {
 		claimDetails.setNatureOfAilment("HEART");
 		claimDetails.setPolicyDetails(policyDetails);
 		
-		approveSummary = new ApproverSummary();
-		approveSummary.setApproverId(1);
-		approveSummary.setApproverRole("MANAGER");
-		approveSummary.setApproverSummaryId(1);
+		approveResponse = new ApproveResponseDto();
+		approveResponse.setMessage(MedicalUtils.CLAIM_APPROVED);
+		approveResponse.setPolicyNo(1);
+		approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);
+	}
+	
+	
+	/**
+	 * The positive test case for approve request
+	 * @throws ClaimNumberNotExistsException 
+	 * @throws ApproverNotExistsException 
+	 */
+	@Test
+	public void testApprove() throws ApproverNotExistsException, ClaimNumberNotExistsException {
+		Mockito.when(approverRepository.findByapproverId(approverDetails.getApproverId())).thenReturn(Optional.of(approverDetails));
+		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
+		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
+		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
+		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
 	}
 	
 	/**
 	 * The positive test case for approve request
 	 * @author Sharath G S
+	 * @throws ClaimNumberNotExistsException 
+	 * @throws ApproverNotExistsException 
 	 */
-	@Test
-	public void testApproveRequest()
+	/*@Test
+	public void approveRequestTest() throws ApproverNotExistsException, ClaimNumberNotExistsException
 	{
 		Mockito.when(approverRepository.findByapproverId(approverDetails.getApproverId())).thenReturn(Optional.of(approverDetails));
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
-		Mockito.when(policyRepository.findById(policyDetails.getPolicyId())).thenReturn(Optional.of(policyDetails));
 		Mockito.when(approveSummaryRepo.save(approveSummary)).thenReturn(approveSummary);
+		Mockito.when(claimRepository.save(claimDetails)).thenReturn(claimDetails);
+		Mockito.when(policyRepository.findById(policyDetails.getPolicyId())).thenReturn(Optional.of(policyDetails));
+		Mockito.when(policyRepository.save(policyDetails)).thenReturn(policyDetails);
+		ApproveResponseDto approveResponse = approveService.claimApproved(approveRequest);
+		Assert.assertEquals(approveResponse.getMessage(), MedicalUtils.APPROVED);
+	}*/
+	
+	
+	/**
+	 * The negative test case for validating claim number
+	 * @author SharatH G S
+	 * @throws ApproverNotExistsException
+	 * @throws ClaimNumberNotExistsException
+	 */
+	@Test(expected = ClaimNumberNotExistsException.class)
+	public void approveRequestTests() throws ApproverNotExistsException, ClaimNumberNotExistsException
+	{
+		Mockito.when(approverRepository.findByapproverId(approverDetails.getApproverId())).thenReturn(Optional.of(approverDetails));
+		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.empty());
+		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
+		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
+		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+	}
+	
+	/**
+	 * The negative case approver not exists 
+	 * @author Sharath G S
+	 * @throws ApproverNotExistsException
+	 * @throws ClaimNumberNotExistsException
+	 */
+	@Test(expected = ApproverNotExistsException.class)
+	public void approveRequestsTest() throws ApproverNotExistsException, ClaimNumberNotExistsException
+	{
+		Mockito.when(approverRepository.findByapproverId(approverDetails.getApproverId())).thenReturn(Optional.empty());
+		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
+		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
+		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
+		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
 	}
 	
 }
