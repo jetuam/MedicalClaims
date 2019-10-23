@@ -66,13 +66,13 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(ApproverNotExistsException.class)
-	public ResponseEntity<ResponseError> approverNotExists(Exception e) {
+	public ResponseEntity<ResponseError> approverNotExists(ApproverNotExistsException e) {
 		ResponseError error = new ResponseError(e.getMessage(), HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(ClaimNumberNotExistsException.class)
-	public ResponseEntity<ResponseError> claimNumberNotExists(Exception e) {
+	public ResponseEntity<ResponseError> claimNumberNotExists(ClaimNumberNotExistsException e) {
 		ResponseError error = new ResponseError(e.getMessage(), HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
