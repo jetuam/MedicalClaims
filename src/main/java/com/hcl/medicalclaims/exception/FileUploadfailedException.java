@@ -4,7 +4,7 @@
 package com.hcl.medicalclaims.exception;
 
 /**
- * @author User1
+ * @author srinivas
  *
  */
 public class FileUploadfailedException extends Exception {

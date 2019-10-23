@@ -26,6 +26,7 @@ import junit.framework.Assert;
 
 /**
  * @author srinivas
+ * to test add claim against policy
  *
  */
 @SuppressWarnings("deprecation")

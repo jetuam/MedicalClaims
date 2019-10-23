@@ -2,19 +2,30 @@ package com.hcl.medicalclaims.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * @author srinivas
  *
  */
 public class AddClaimRequestDTO {
+	@NotBlank(message = "hospitalName is mandatory")
+	@NotNull(message = "hospitalName cannot be null")
 	private Integer policyNo;
 	private Double claimAmount;
 	private LocalDate admittedDate;
 	private LocalDate dischargeDate;
+	@NotBlank(message = "hospitalName is mandatory")
+	@NotNull(message = "hospitalName cannot be null")
+	@Size(min = 2)
 	private String hospitalName;
 	private String diagnosis;
 	private String dischargeSummary;
 	private String claimUploadFilePath;
+	@NotBlank(message = "natureOfAilment is mandatory")
+	@NotNull(message = "natureOfAilment cannot be null")
 	private String natureOfAilment;
 
 	/**

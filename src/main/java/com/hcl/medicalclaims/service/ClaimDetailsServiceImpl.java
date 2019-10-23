@@ -10,14 +10,15 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hcl.medicalclaims.controller.ClaimDetailsController;
 import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
 import com.hcl.medicalclaims.dto.ClaimDto;
-import com.hcl.medicalclaims.dto.PolicyDto;
+import com.hcl.medicalclaims.entity.ApproverDetails;
 import com.hcl.medicalclaims.entity.ClaimDetails;
-import com.hcl.medicalclaims.entity.PolicyDetails;
+import com.hcl.medicalclaims.exception.ClaimDetailsNotfoundException;
+import com.hcl.medicalclaims.repository.ApproverRepository;
 import com.hcl.medicalclaims.repository.ClaimDetailsRepository;
 import com.hcl.medicalclaims.repository.PolicyRepository;
+
 /* 
 *@author priyanka
 */
@@ -28,38 +29,59 @@ public class ClaimDetailsServiceImpl implements ClaimsDetailsService {
 	PolicyRepository policyRepository;
 	@Autowired
 	ClaimDetailsRepository claimDetailsRepository;
+	@Autowired
+	ApproverRepository approverRepository;
+	private ClaimDto claimDto;
 	/**
 	 * @apiNote on the basis of policy_id
 	 * @return claim details
 	 */
 	@Override
-	public ClaimDetailsResponseDto getClaimDetails() {
+	public ClaimDetailsResponseDto getClaimDetails(Integer approverId) {
 		LOGGER.info("service for getting claim details");
 	 	List<ClaimDto> claimDetailss = new ArrayList<>();
+	   
 	 	ClaimDetailsResponseDto claimDetailsResponseDto = new ClaimDetailsResponseDto();
-		List<PolicyDetails> polictDetails = policyRepository.findAll();
-		polictDetails.stream().forEach(policy -> {
-			Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByPolicyDetails(policy);
-			if(claimDetailsOptional.isPresent())
-			{
+	 	Optional<ApproverDetails> findById = approverRepository.findById(approverId);
+	 	if (!findById.isPresent()) {
+			//throw new ApproverDetails()
+		}
+	 	ApproverDetails approverDetails = findById.get();	
+	 	LOGGER.info("ROLE:"+approverDetails.getApproverRole());
+	 	if(approverDetails.getApproverRole().equalsIgnoreCase("MANAGER"))
+	 	{	
+	 		LOGGER.info("inside manager"+approverDetails.getApproverRole());
+	 		String approvalStatus="submitted";
+				Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByClaimStatus(approvalStatus);
+				if(!claimDetailsOptional.isPresent()) {
+					throw new ClaimDetailsNotfoundException("claim not found");
+				}
+
+				 List<ClaimDetails> claimDetails = claimDetailsOptional.get();
+				 claimDetails.stream().forEach(claim -> {
+					claimDto = new ClaimDto();
+					BeanUtils.copyProperties(claim, claimDto);
+					claimDto.setPolicyId(claimDetailsOptional.get().get(0).getPolicyDetails().getPolicyId());
+					claimDetailss.add(claimDto);
+				 });
+	 	}else if (approverDetails.getApproverRole().equalsIgnoreCase("SENIOR MANAGER")) {
+	 		String approvalStatus="forwarded";
+	 		Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByClaimStatus(approvalStatus);
+			if(!claimDetailsOptional.isPresent()) {
+				throw new ClaimDetailsNotfoundException("claim not found");
+			}
+
 			 List<ClaimDetails> claimDetails = claimDetailsOptional.get();
 			 claimDetails.stream().forEach(claim -> {
-				ClaimDto claimDto = new ClaimDto();
+				claimDto = new ClaimDto();
 				BeanUtils.copyProperties(claim, claimDto);
-				claimDto.setPolicyId(policy.getPolicyId());
+				claimDto.setPolicyId(claimDetailsOptional.get().get(0).getPolicyDetails().getPolicyId());
 				claimDetailss.add(claimDto);
-
-			});
-			}
-			
-			claimDetailsResponseDto.setClaimDetails(claimDetailss);
-			
-			
-		});
+			 });
+		}
+	 	claimDetailsResponseDto.setClaimDetails(claimDetailss);
 		return claimDetailsResponseDto;
-		
-	
-
+	 	
 	}
 
 }

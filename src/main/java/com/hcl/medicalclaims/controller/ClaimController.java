@@ -3,6 +3,8 @@
  */
 package com.hcl.medicalclaims.controller;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import com.hcl.medicalclaims.service.ClaimService;
 
 /**
  * @author srinivas
- *
+ * To add Claim against policy
  */
 @RestController
 @CrossOrigin(allowedHeaders = { "*", "*/" }, origins = { "*", "*/" })
@@ -30,15 +32,22 @@ public class ClaimController {
 	@Autowired
 	private ClaimService claimService;
 
+	/**
+	 * @param addClaimRequest
+	 * @return addClaimResponseDTO
+	 * @throws PolicyNotFoundException
+	 * @throws HospitalNotFoundException
+	 * to add medical claim against Policy
+	 */
 	@PostMapping("/claims")
-	public AddClaimResponseDTO addClaim(@RequestBody AddClaimRequestDTO addClaimRequest)
+	public AddClaimResponseDTO addClaim(@Valid @RequestBody AddClaimRequestDTO addClaimRequest)
 			throws PolicyNotFoundException, HospitalNotFoundException {
 		LOGGER.info("In addClaim method of ClaimController class-----");
 		ClaimDetails addClaim = claimService.addClaim(addClaimRequest);
-		AddClaimResponseDTO AddClaimResponse = new AddClaimResponseDTO();
-		AddClaimResponse.setClaimNo(addClaim.getClaimNo());
-		AddClaimResponse.setMessage(MedicalClaimsConstants.ADD_CLAIM_SUCCESS);
-		AddClaimResponse.setStatusCode(MedicalClaimsConstants.POST_STATUS_CODE);
-		return AddClaimResponse;
+		AddClaimResponseDTO addClaimResponse = new AddClaimResponseDTO();
+		addClaimResponse.setClaimNo(addClaim.getClaimNo());
+		addClaimResponse.setMessage(MedicalClaimsConstants.ADD_CLAIM_SUCCESS);
+		addClaimResponse.setStatusCode(MedicalClaimsConstants.POST_STATUS_CODE);
+		return addClaimResponse;
 	}
 }

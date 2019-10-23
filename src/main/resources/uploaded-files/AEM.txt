@@ -1,0 +1,71 @@
+AEM Tutorial link
+http://www.aemcq5tutorials.com/tutorials/aem-cq5-tutorial/
+
+Set up link
+https://solutionpartners.adobe.com/home/prereg.html
+
+https://solutionpartners.adobe.com/home.html
+user name:vasanthagopi.k@hcl.com
+pass:Appa@1991
+
+Adobe ID: vasanthg30661109
+
+http://localhost:4502/miscadmin
+
+http://localhost:4502/projects.html/content/projects
+                      
+
+Reference link
+https://github.com/pankajchhatri/AEM/tree/master/Developer%20course
+https://helpx.adobe.com/experience-manager/kt/index/aem-6-3-videos.html
+
+https://docs.adobe.com/content/help/en/experience-manager-htl/using/htl/expression-language.html
+
+https://github.com/pankajchhatri/AEM
+
+aem widgets api
+https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/reference-materials/widgets-api/index.html
+
+AEM File structure
+1.Create folder
+1.1.create components folder
+1.1 create contents folder
+1.2 create structure folder
+1.2.1 create Component file (Give name as project reasonable)
+1.2 Create template folder
+1.2.1 create template file (Give name as project reasonable)
+
+Super Type-wcm/foundation/components/page
+
+/content(/.*)?
+
+
+package
+http://localhost:4502/crx/packmgr/index.jsp
+
+css inculde with #base=css(folder name) same as js also
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.js @ categories='we.train.all'}"/>
+
+Page navigation
+<div data-sly-resource ="${'site-topnav' @ resourceType='training/compontents/content/site-topnav'}"></div>
+
+Childpage:
+<li class="nav navbar-nav" data-sly-repeat = "${currentPage.listChildren}">
+<a href="${item.path}.html">${item.title}</a>
+</li>
+
+UI Form:
+/libs/granite/ui/components/foundation/form/
+design tools
+http://localhost:4502/miscadmin#/etc/designs
+
+Editor config
+cq:editConfig
+cq:inplaceEditing
+
+granite/ui/components/foundation/form/textfield
+cq/gui/components/authoring/dialog/richtext
+
+ Documentation on Components: https://docs.adobe.com/docs/en/cq/5-61/developing/components.html
+ Create a blog component: http://cq5tutorials.blogspot.in/2014/03/Creating-cq5-configurablecomponent-part-1.html & http://cq5tutorials.blogspot.in/2014/03/Creating-cq5-configurablecomponent-part-2.html
+

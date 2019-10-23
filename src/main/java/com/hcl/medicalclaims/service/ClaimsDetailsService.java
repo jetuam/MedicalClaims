@@ -8,5 +8,5 @@ import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
 
 public interface ClaimsDetailsService {
 
-	public ClaimDetailsResponseDto getClaimDetails();
+	public ClaimDetailsResponseDto getClaimDetails(Integer approverId);
 }

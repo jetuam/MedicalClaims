@@ -40,13 +40,18 @@ public class ClaimServiceImpl implements ClaimService {
 	HospitalRepository hospitalRepository;
 	Random random = new Random();
 
+	/**
+	 * @param addClaimRequest
+	 * @return claimDetails
+	 * @throws PolicyNotFoundException
+	 * @throws HospitalNotFoundException
+	 */
 	@Override
 	public ClaimDetails addClaim(AddClaimRequestDTO addClaimRequest)
 			throws PolicyNotFoundException, HospitalNotFoundException {
 		LOGGER.info("In addClaim() method of ClaimServiceImpl class----");
 		ClaimDetails claimDetails = new ClaimDetails();
 		BeanUtils.copyProperties(addClaimRequest, claimDetails);
-		LOGGER.info("policy no in dto:" + addClaimRequest.getPolicyNo());
 		Optional<PolicyDetails> optionalPolicyDetails = policyDetailsRepository
 				.findByPolicyNo(addClaimRequest.getPolicyNo());
 		if (!optionalPolicyDetails.isPresent()) {

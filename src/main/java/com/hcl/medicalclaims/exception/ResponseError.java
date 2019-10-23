@@ -2,6 +2,10 @@ package com.hcl.medicalclaims.exception;
 
 import java.io.Serializable;
 
+/**
+ * @author srinivas
+ *
+ */
 public class ResponseError implements Serializable {
 
 	private static final long serialVersionUID = 1L;

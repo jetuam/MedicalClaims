@@ -16,4 +16,6 @@ import com.hcl.medicalclaims.entity.PolicyDetails;
 public interface ClaimDetailsRepository extends JpaRepository<ClaimDetails, Integer> {
 
 	public Optional<List<ClaimDetails>> findByPolicyDetails(PolicyDetails policyDetails);
+
+	public Optional<List<ClaimDetails>> findByClaimStatus(String approvalStatus);
 }
