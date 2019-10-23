@@ -57,6 +57,7 @@ public class ApproveServiceTest {
 	ClaimDetails claimDetails = null;
 	PolicyDetails policyDetails = null;
 	ApproverSummary approveSummary = null;
+	ApproverDetails approveDetailsManager = null;
 	ApproveResponseDto approveResponse = null;
 	
 	@Before
@@ -84,12 +85,18 @@ public class ApproveServiceTest {
 		approverDetails.setPassword("test@123");
 		approverDetails.setApproverRole("MANAGER");
 		
+		approveDetailsManager = new ApproverDetails();
+		approveDetailsManager.setApproverId(1);
+		approveDetailsManager.setMailId("sharathgs777@gmail.com");
+		approveDetailsManager.setApproverName("Sharath");
+		approveDetailsManager.setPassword("test@123");
+		approveDetailsManager.setApproverRole("MANAGER");
 		
 		approveSummary = new ApproverSummary();
 		approveSummary.setApproverId(1);
 		approveSummary.setApproverRole("MANAGER");
 		approveSummary.setApproverSummaryId(1);
-		
+				
 		claimDetails = new ClaimDetails();
 		claimDetails.setApproverSummaryId(1);
 		claimDetails.setClaimAmount((double) 50000);
@@ -110,7 +117,7 @@ public class ApproveServiceTest {
 	
 	
 	/**
-	 * The positive test case for approve request
+	 * The positive test case for approve request for manager
 	 * @throws ClaimNumberNotExistsException 
 	 * @throws ApproverNotExistsException 
 	 */
@@ -122,6 +129,22 @@ public class ApproveServiceTest {
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
 		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
 	}
+	
+	
+	/**
+	 * The positive test case for approve request for senior manager
+	 * @throws ClaimNumberNotExistsException 
+	 * @throws ApproverNotExistsException 
+	 */
+	@Test
+	public void testApproveManager() throws ApproverNotExistsException, ClaimNumberNotExistsException {
+		Mockito.when(approverRepository.findByapproverId(approveDetailsManager.getApproverId())).thenReturn(Optional.of(approverDetails));
+		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
+		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
+		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
+		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+	}
+	
 	
 	/**
 	 * The positive test case for approve request

@@ -27,21 +27,32 @@ import
 	 */
 		  @RunWith(MockitoJUnitRunner.class) public class ClaimDetailsServiceTest {
 		  
-		  @InjectMocks ClaimDetailsServiceImpl claimDetailsServiceImpl;
+		  @InjectMocks 
+		  ClaimDetailsServiceImpl claimDetailsServiceImpl;
 		  
-		  @Mock ClaimDetailsRepository claimDetailsRepository;
+		  @Mock 
+		  ClaimDetailsRepository claimDetailsRepository;
+		  
 		  @Mock 
 		  ApproverRepository approverRepository;
-		  @Mock PolicyRepository policyRepository; List<ClaimDto> claimDetailss;
-		  ClaimDto claimDto; ClaimDetailsResponseDto claimDetailsResponseDto;
-		  List<ClaimDetails> claimDet; ClaimDetails claimDetails; 
+		  
+		  @Mock 
+		  PolicyRepository policyRepository; 
+		  List<ClaimDto> claimDetailss;
+		  ClaimDto claimDto; 
+		  ClaimDetailsResponseDto claimDetailsResponseDto;
+		  List<ClaimDetails> claimDet; 
+		  ClaimDetails claimDetails; 
 		  PolicyDetails polictDetails; 
 		  Integer approverId;
 		  Optional<List<ClaimDetails>> claimDetailsOptional;
 		  List<PolicyDetails> polictDetailss;
 		  Optional<ApproverDetails> findById;
 		  ApproverDetails approverDetails;
-		  @Before public void setup() {
+		  
+		  
+		  @Before 
+		  public void setup() {
 			  claimDetailss = new ArrayList<>();
 		  polictDetails=new PolicyDetails(); polictDetails.setPolicyId(1);
 		  polictDetails.setPolicyNo(1234); polictDetails.setPolicyType("Dental");
@@ -90,9 +101,11 @@ import
 		  claimDet.add(claimDetails);
 		  claimDetailsOptional=Optional.ofNullable(claimDet);
 		  claimDetailsResponseDto=new ClaimDetailsResponseDto();
-		  claimDetailsResponseDto.setClaimDetails(claimDetailss); }
+		  claimDetailsResponseDto.setClaimDetails(claimDetailss); 
+		  }
 		  
-		  @Test public void getClaimDetailsTest() {
+		  @Test 
+		  public void getClaimDetailsTest() {
 		  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(findById);
 		  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
 		  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
