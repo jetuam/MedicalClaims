@@ -18,6 +18,7 @@ import
   com.hcl.medicalclaims.entity.ClaimDetails; import
   com.hcl.medicalclaims.entity.PolicyDetails;
 import com.hcl.medicalclaims.exception.ApproverNotExistsException;
+import com.hcl.medicalclaims.exception.ClaimDetailsNotfoundException;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import
   com.hcl.medicalclaims.repository.ClaimDetailsRepository; import
@@ -50,6 +51,7 @@ import
 		  List<PolicyDetails> polictDetailss;
 		  Optional<ApproverDetails> findById;
 		  ApproverDetails approverDetails;
+		  ApproverDetails approverDetailsManager;
 		  
 		  
 		  @Before 
@@ -91,6 +93,8 @@ import
 		  claimDto.setClaimUploadFilePath("path");
 		  claimDto.setDiagnosis("typhoid"); 
 		  claimDto.setHospitalName("asd");
+		  
+		  
 		  approverDetails=new ApproverDetails();
 		  approverDetails.setApproverId(1);
 		  approverDetails.setApproverName("Priyanka");
@@ -98,6 +102,16 @@ import
 		  approverDetails.setMailId("Priyanka@gmail.com");
 		  approverDetails.setPassword("ad@123");
 		  findById=Optional.of(approverDetails);
+		  
+		  
+		  approverDetailsManager=new ApproverDetails();
+		  approverDetailsManager.setApproverId(1);
+		  approverDetailsManager.setApproverName("Priyanka");
+		  approverDetailsManager.setApproverRole("MANAGER");
+		  approverDetailsManager.setMailId("Priyanka@gmail.com");
+		  approverDetailsManager.setPassword("ad@123");
+		  findById=Optional.of(approverDetailsManager);
+		  
 		  claimDetailss.add(claimDto); claimDet=new ArrayList<>();
 		  claimDet.add(claimDetails);
 		  claimDetailsOptional=Optional.ofNullable(claimDet);
@@ -115,5 +129,49 @@ import
 		  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
 		  assertNotNull(claimDetailsResponseDto); 
 		  } 
+		  
+		  /**
+		   * The negative test case for claim details
+		   * @author Sharath G S
+		 * @throws ApproverNotExistsException 
+		   * 
+		   */
+		  @Test(expected = ClaimDetailsNotfoundException.class)
+		  public void getClaimDetailsTestsForClaimDetails() throws ApproverNotExistsException
+		  {
+			  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(findById);
+			  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional.empty()); 
+			  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
+			  assertNotNull(claimDetailsResponseDto); 
+		  }
+		  
+		  /**
+		   * The negative test case for claim details
+		   * @author Sharath G S
+		   * @throws ApproverNotExistsException
+		   */
+		  @Test(expected = ApproverNotExistsException.class) 
+		  public void getClaimDetailsTestForApprover() throws ApproverNotExistsException 
+		  {
+
+		  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(findById.empty());
+		  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
+		  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
+		  assertNotNull(claimDetailsResponseDto); 
+		  }
+		  
+		  /**
+		   * The positive test case for senior manager
+		   * @author Sharath G S
+		 * @throws ApproverNotExistsException 
+		   */
+		  @Test
+		  public void getClaimsDetailsManager() throws ApproverNotExistsException
+		  {
+			  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(Optional.of(approverDetailsManager));
+			  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
+			  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
+			  assertNotNull(claimDetailsResponseDto); 
+		  }
 }
 		 
