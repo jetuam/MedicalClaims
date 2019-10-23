@@ -24,7 +24,8 @@
 			**/repository/*.java,
 			**/constants/*.java,
 			**/util/*.java,
-			**/scheduler/*.java
+			**/scheduler/*.java,
+			**/controller/FileUploadController.java
 		</sonar.exclusions>
 	</properties>
 
