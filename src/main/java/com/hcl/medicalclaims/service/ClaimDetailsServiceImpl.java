@@ -14,6 +14,7 @@ import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
 import com.hcl.medicalclaims.dto.ClaimDto;
 import com.hcl.medicalclaims.entity.ApproverDetails;
 import com.hcl.medicalclaims.entity.ClaimDetails;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
 import com.hcl.medicalclaims.exception.ClaimDetailsNotfoundException;
 import com.hcl.medicalclaims.repository.ApproverRepository;
 import com.hcl.medicalclaims.repository.ClaimDetailsRepository;
@@ -35,22 +36,22 @@ public class ClaimDetailsServiceImpl implements ClaimsDetailsService {
 	/**
 	 * @apiNote on the basis of policy_id
 	 * @return claim details
+	 * @throws ApproverNotExistsException 
 	 */
 	@Override
-	public ClaimDetailsResponseDto getClaimDetails(Integer approverId) {
+	public ClaimDetailsResponseDto getClaimDetails(Integer approverId) throws ApproverNotExistsException {
 		LOGGER.info("service for getting claim details");
 	 	List<ClaimDto> claimDetailss = new ArrayList<>();
 	   
 	 	ClaimDetailsResponseDto claimDetailsResponseDto = new ClaimDetailsResponseDto();
 	 	Optional<ApproverDetails> findById = approverRepository.findById(approverId);
 	 	if (!findById.isPresent()) {
-			//throw new ApproverDetails()
+	 		throw new ApproverNotExistsException("approver not found");
 		}
 	 	ApproverDetails approverDetails = findById.get();	
-	 	LOGGER.info("ROLE:"+approverDetails.getApproverRole());
 	 	if(approverDetails.getApproverRole().equalsIgnoreCase("MANAGER"))
 	 	{	
-	 		LOGGER.info("inside manager"+approverDetails.getApproverRole());
+	 		LOGGER.info("inside manager");
 	 		String approvalStatus="submitted";
 				Optional<List<ClaimDetails>> claimDetailsOptional = claimDetailsRepository.findByClaimStatus(approvalStatus);
 				if(!claimDetailsOptional.isPresent()) {

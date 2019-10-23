@@ -1,6 +1,7 @@
 package com.hcl.medicalclaims.service;
 
 import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
+import com.hcl.medicalclaims.exception.ApproverNotExistsException;
 /**
  * @author priyanka
  *
@@ -8,5 +9,5 @@ import com.hcl.medicalclaims.dto.ClaimDetailsResponseDto;
 
 public interface ClaimsDetailsService {
 
-	public ClaimDetailsResponseDto getClaimDetails(Integer approverId);
+	public ClaimDetailsResponseDto getClaimDetails(Integer approverId) throws ApproverNotExistsException;
 }

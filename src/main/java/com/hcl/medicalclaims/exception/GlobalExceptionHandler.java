@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 
 	/**
 	 * @param Exception
-	 * @author srinivas
+	 * @author 
 	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(CommonException.class)
