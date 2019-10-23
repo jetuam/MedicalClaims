@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
 
 import com.hcl.medicalclaims.dto.ApproveRequestDto;
 import com.hcl.medicalclaims.dto.ApproveResponseDto;
@@ -127,7 +128,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
 	}
 	
 	
@@ -142,7 +143,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
 	}
 	
 	
@@ -179,7 +180,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.empty());
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
 	}
 	
 	/**
@@ -195,7 +196,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getStatusCode(), MedicalUtils.POLICY_HTTP_SUCCESS);
+		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
 	}
 	
 }

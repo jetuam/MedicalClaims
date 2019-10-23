@@ -27,7 +27,7 @@ import
 	 * @author priyanka
 	 *
 	 */
-		  @RunWith(MockitoJUnitRunner.class) public class ClaimDetailsServiceTest {
+		  @RunWith(MockitoJUnitRunner.Silent.class) public class ClaimDetailsServiceTest {
 		  
 		  @InjectMocks 
 		  ClaimDetailsServiceImpl claimDetailsServiceImpl;
@@ -169,6 +169,35 @@ import
 		  public void getClaimsDetailsManager() throws ApproverNotExistsException
 		  {
 			  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(Optional.of(approverDetailsManager));
+			  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
+			  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
+			  assertNotNull(claimDetailsResponseDto); 
+		  }
+		  
+		  /**
+		   * The negative test case for claim detials senior manager
+		   * @author Sharath G S
+		   * @throws ApproverNotExistsException
+		   */
+		  @Test(expected = ClaimDetailsNotfoundException.class)
+		  public void getClaimsDetailManager() throws ApproverNotExistsException
+		  {
+			  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(Optional.of(approverDetailsManager));
+			  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional.empty()); 
+			  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
+			  assertNotNull(claimDetailsResponseDto); 
+		  }
+		  
+		  
+		  /**
+		   * The negative test case for claim detials senior manager
+		   * @author Sharath G S
+		   * @throws ApproverNotExistsException
+		   */
+		  @Test(expected = ApproverNotExistsException.class)
+		  public void getClaimDetailManager() throws ApproverNotExistsException
+		  {
+			  Mockito.when(approverRepository.findById(Mockito.any())).thenReturn(Optional.empty());
 			  Mockito.when(claimDetailsRepository.findByClaimStatus(Mockito.anyString())).thenReturn(claimDetailsOptional); 
 			  ClaimDetailsResponseDto claimDetailsResponseDto=claimDetailsServiceImpl.getClaimDetails(Mockito.anyInt());
 			  assertNotNull(claimDetailsResponseDto); 
