@@ -76,5 +76,11 @@ public class GlobalExceptionHandler {
 		ResponseError error = new ResponseError(e.getMessage(), HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(ClaimDetailsNotfoundException.class)
+	public ResponseEntity<ResponseError> claimDetailsNotExists(ClaimDetailsNotfoundException e) {
+		ResponseError error = new ResponseError(e.getMessage(), HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 
 }
