@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.hcl.medicalclaims.dto.ApproveRequestDto;
 import com.hcl.medicalclaims.dto.ApproveResponseDto;
 import com.hcl.medicalclaims.entity.ApproverDetails;
-import com.hcl.medicalclaims.entity.ApproverSummary;
 import com.hcl.medicalclaims.entity.ClaimDetails;
 import com.hcl.medicalclaims.exception.ApproverNotExistsException;
 import com.hcl.medicalclaims.exception.ClaimNumberNotExistsException;
@@ -62,8 +61,6 @@ public class ApproverServiceImpl implements ApproverService {
 		LOGGER.info("the events for the approve request is called");
 
 		ApproveResponseDto approveResponse = new ApproveResponseDto();
-		ApproverSummary approveSummary = new ApproverSummary();
-
 		Optional<ApproverDetails> approverDetails = approverRepository.findByapproverId(approveRequest.getApproverId());
 		Optional<ClaimDetails> claimDetails = claimRepository.findByclaimId(approveRequest.getClaimId());
 
@@ -71,65 +68,9 @@ public class ApproverServiceImpl implements ApproverService {
 			if (claimDetails.isPresent()) {
 				if (approverDetails.get().getApproverRole().equals(MedicalUtils.MANAGER)) {
 					approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
-					/*
-					 * LOGGER.info("inside if statement for approverDetails");
-					 * approveSummary.setApproverId(approverDetails.get().getApproverId());
-					 * approveSummary.setApproverRole(approverDetails.get().getApproverRole());
-					 * ApproverSummary approve = approveSummaryRepo.save(approveSummary);
-					 * 
-					 * ClaimDetails claims = new ClaimDetails();
-					 * claimDetails.get().setClaimStatus(approveRequest.getClaimStatus());
-					 * claimDetails.get().setApproverSummaryId(approve.getApproverSummaryId());
-					 * BeanUtils.copyProperties(claimDetails.get(), claims);
-					 * claimRepository.save(claims);
-					 * 
-					 * 
-					 * Optional<PolicyDetails> policyDeduction =
-					 * policyRepository.findById(approveRequest.getPolicyId());
-					 * if(policyDeduction.isPresent() &&
-					 * approveRequest.getClaimStatus().equals(MedicalUtils.APPROVED)) {
-					 * 
-					 * Double amountDeduction = claimDetails.get().getClaimAmount() +
-					 * policyDeduction.get().getClaimedAmount(); PolicyDetails policyDeduct = new
-					 * PolicyDetails(); BeanUtils.copyProperties(policyDeduction.get(),
-					 * policyDeduct); policyDeduct.setClaimedAmount(amountDeduction);
-					 * policyRepository.save(policyDeduct); }
-					 * approveResponse.setMessage(MedicalUtils.CLAIM_APPROVED);
-					 * approveResponse.setPolicyNo(approveRequest.getPolicyId());
-					 * approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);
-					 */
-
 				} else if (approverDetails.get().getApproverRole().equals(MedicalUtils.BRANCH_MANAGER)) {
 
 					approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
-					/*
-					 * LOGGER.info("inside else if statement for approverDetails");
-					 * approveSummary.setApproverId(approverDetails.get().getApproverId());
-					 * approveSummary.setApproverRole(approverDetails.get().getApproverRole());
-					 * ApproverSummary approve = approveSummaryRepo.save(approveSummary);
-					 * 
-					 * ClaimDetails claims = new ClaimDetails();
-					 * claimDetails.get().setClaimStatus(approveRequest.getClaimStatus());
-					 * claimDetails.get().setApproverSummaryId(approve.getApproverSummaryId());
-					 * BeanUtils.copyProperties(claimDetails.get(), claims);
-					 * claimRepository.save(claims);
-					 * 
-					 * 
-					 * Optional<PolicyDetails> policyDeduction =
-					 * policyRepository.findById(approveRequest.getPolicyId());
-					 * if(policyDeduction.isPresent() &&
-					 * approveRequest.getClaimStatus().equals(MedicalUtils.APPROVED)) {
-					 * PolicyDetails policyDeduct = new PolicyDetails(); Double amountDeduction =
-					 * claimDetails.get().getClaimAmount() +
-					 * policyDeduction.get().getClaimedAmount();
-					 * BeanUtils.copyProperties(policyDeduction.get(), policyDeduct);
-					 * policyDeduct.setClaimedAmount(amountDeduction);
-					 * policyRepository.save(policyDeduct); }
-					 * approveResponse.setMessage(MedicalUtils.CLAIM_APPROVED);
-					 * approveResponse.setPolicyNo(approveRequest.getPolicyId());
-					 * approveResponse.setStatusCode(MedicalUtils.POLICY_HTTP_SUCCESS);
-					 */
-
 				}
 			} else {
 				throw new ClaimNumberNotExistsException(MedicalUtils.CLAIM_NO_NOT_EXISTS);
