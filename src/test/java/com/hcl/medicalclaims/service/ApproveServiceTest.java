@@ -128,7 +128,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
+		Assert.assertEquals( "Claim approved successfully",approved.getMessage());
 	}
 	
 	
@@ -143,7 +143,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
+		Assert.assertEquals( "Claim approved successfully",approved.getMessage());
 	}
 	
 	
@@ -180,7 +180,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.empty());
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
+		Assert.assertEquals( "Claim approved successfully",approved.getMessage());
 	}
 	
 	/**
@@ -196,7 +196,7 @@ public class ApproveServiceTest {
 		Mockito.when(claimRepository.findByclaimId(claimDetails.getClaimId())).thenReturn(Optional.of(claimDetails));
 		Mockito.when(approveUtil.approveManagerUtil(Optional.of(approverDetails), Optional.of(claimDetails), approveRequest)).thenReturn(approveResponse);
 		ApproveResponseDto approved = approveService.claimApproved(approveRequest);
-		Assert.assertEquals(approved.getMessage(), "Claim approved successfully");
+		Assert.assertEquals( "Claim approved successfully",approved.getMessage());
 	}
 	
 }

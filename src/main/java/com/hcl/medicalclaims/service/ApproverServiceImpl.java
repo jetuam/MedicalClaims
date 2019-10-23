@@ -66,12 +66,19 @@ public class ApproverServiceImpl implements ApproverService {
 
 		if (approverDetails.isPresent()) {
 			if (claimDetails.isPresent()) {
-				if (approverDetails.get().getApproverRole().equals(MedicalUtils.MANAGER)) {
-					approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
-				} else if (approverDetails.get().getApproverRole().equals(MedicalUtils.BRANCH_MANAGER)) {
+				/*
+				 * if (approverDetails.get().getApproverRole().equals(MedicalUtils.MANAGER)) {
+				 * approveResponse = approveUtil.approveManagerUtil(approverDetails,
+				 * claimDetails, approveRequest); } else if
+				 * (approverDetails.get().getApproverRole().equals(MedicalUtils.BRANCH_MANAGER))
+				 * {
+				 * 
+				 * approveResponse = approveUtil.approveManagerUtil(approverDetails,
+				 * claimDetails, approveRequest); }
+				 */
 
-					approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
-				}
+				approveResponse = approveUtil.approveManagerUtil(approverDetails, claimDetails, approveRequest);
+
 			} else {
 				throw new ClaimNumberNotExistsException(MedicalUtils.CLAIM_NO_NOT_EXISTS);
 			}
