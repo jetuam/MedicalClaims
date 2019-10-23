@@ -14,6 +14,12 @@ import com.hcl.medicalclaims.exception.PolicyNotFoundException;
  */
 public interface ClaimService {
 
+	/**
+	 * @param addClaimRequest
+	 * @return
+	 * @throws PolicyNotFoundException
+	 * @throws HospitalNotFoundException
+	 */
 	ClaimDetails addClaim(AddClaimRequestDTO addClaimRequest) throws PolicyNotFoundException, HospitalNotFoundException;
 
 }

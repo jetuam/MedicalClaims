@@ -19,13 +19,19 @@ import com.hcl.medicalclaims.dto.FileUploadResponseDTO;
 
 /**
  * @author srinivas
- *
+ * to upload file
  */
 @RestController
 @CrossOrigin(allowedHeaders = { "*", "*/" }, origins = { "*", "*/" })
 public class FileUploadController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadController.class);
 
+	/**
+	 * @param file
+	 * @return fileUploadResponseDTO
+	 * @throws IOException
+	 * to upload file
+	 */
 	@SuppressWarnings("resource")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FileUploadResponseDTO fileUpload(@RequestParam("file") MultipartFile file) throws IOException {

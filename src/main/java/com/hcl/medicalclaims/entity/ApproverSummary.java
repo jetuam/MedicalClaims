@@ -1,17 +1,9 @@
 package com.hcl.medicalclaims.entity;
 
-
-/**
- * 
- */
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  * @author User1
@@ -25,8 +17,6 @@ public class ApproverSummary {
 	private String approverRole;
 	private Integer approverId;
 
-	
-	
 	public Integer getApproverId() {
 		return approverId;
 	}

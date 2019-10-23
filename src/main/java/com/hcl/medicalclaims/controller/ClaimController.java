@@ -23,7 +23,7 @@ import com.hcl.medicalclaims.service.ClaimService;
 
 /**
  * @author srinivas
- *
+ * To add Claim against policy
  */
 @RestController
 @CrossOrigin(allowedHeaders = { "*", "*/" }, origins = { "*", "*/" })
@@ -32,6 +32,13 @@ public class ClaimController {
 	@Autowired
 	private ClaimService claimService;
 
+	/**
+	 * @param addClaimRequest
+	 * @return addClaimResponseDTO
+	 * @throws PolicyNotFoundException
+	 * @throws HospitalNotFoundException
+	 * to add medical claim against Policy
+	 */
 	@PostMapping("/claims")
 	public AddClaimResponseDTO addClaim(@Valid @RequestBody AddClaimRequestDTO addClaimRequest)
 			throws PolicyNotFoundException, HospitalNotFoundException {

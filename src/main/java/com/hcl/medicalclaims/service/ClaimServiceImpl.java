@@ -40,6 +40,12 @@ public class ClaimServiceImpl implements ClaimService {
 	HospitalRepository hospitalRepository;
 	Random random = new Random();
 
+	/**
+	 * @param addClaimRequest
+	 * @return claimDetails
+	 * @throws PolicyNotFoundException
+	 * @throws HospitalNotFoundException
+	 */
 	@Override
 	public ClaimDetails addClaim(AddClaimRequestDTO addClaimRequest)
 			throws PolicyNotFoundException, HospitalNotFoundException {
